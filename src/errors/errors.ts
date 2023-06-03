@@ -9,7 +9,17 @@ export class NameConflictError extends Error {
 export class DeletedReferenceError extends Error {
   constructor(public referenced: Field, referencer: Field) {
     super(
-      `Cannot delete field ${referenced.name} as it is referenced by ${referencer.name}`
+      `Cannot delete field ${
+        referenced.name
+      } as it is referenced by ${referencer.fullName()}`
+    );
+  }
+}
+
+export class IncompatibleReferenceTypeError extends Error {
+  constructor(public referenced: Field, referencer: Field) {
+    super(
+      `Cannot set a reference from ${referencer.qualifiedName()} to ${referenced.qualifiedName()}`
     );
   }
 }
