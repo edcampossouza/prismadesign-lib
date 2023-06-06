@@ -12,8 +12,8 @@ export class Model {
   addField(name: string, type: DataType) {
     const _exists: Field | undefined = this.fields.find((f) => f.name === name);
     if (_exists) throw new NameConflictError(name, "field");
+    const newField = new Field(name, this, type);
+    this.fields.push(newField);
   }
-  removeField(field: Field) {
-    
-  }
+  removeField(field: Field) {}
 }
