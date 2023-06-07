@@ -1,6 +1,9 @@
+import { InvalidNameError } from "../index";
 import { DataType } from "./DataType";
 import { Model } from "./Model";
 import { Reference } from "./Reference";
+
+const FieldNameRegex = /^[A-Za-z][A-Za-z0-9_]*$/;
 
 export class Field {
   constructor(
@@ -8,7 +11,9 @@ export class Field {
     public model: Model,
     public type: DataType,
     private referencedBy: Reference[] = []
-  ) {}
+  ) {
+    if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
+  }
 
   private references?: Reference;
 

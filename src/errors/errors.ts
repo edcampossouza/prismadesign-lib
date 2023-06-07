@@ -23,3 +23,9 @@ export class IncompatibleReferenceTypeError extends Error {
     );
   }
 }
+
+export class InvalidNameError extends Error {
+  constructor(public name: string, type: "model" | "field") {
+    super(`Invalid ${type} name: ${name}`);
+  }
+}
