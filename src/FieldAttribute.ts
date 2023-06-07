@@ -1,5 +1,8 @@
 class FieldAttribute {
   constructor(public name: string) {}
+  toSerial() {
+    return { name: this.name };
+  }
 }
 
 const IdFieldAttribute = new FieldAttribute("id");

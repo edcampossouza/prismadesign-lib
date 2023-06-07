@@ -13,4 +13,11 @@ export class Schema {
     this.models.push(newModel);
     return newModel;
   }
+
+  toSerial() {
+    return {
+      name: this.name,
+      models: this.models.map((m) => m.toSerial()),
+    };
+  }
 }

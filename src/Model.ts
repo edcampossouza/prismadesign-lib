@@ -24,7 +24,15 @@ export class Model {
     if (_exists) throw new NameConflictError(name, "field");
     const newField = new Field(name, this, type, fieldAttributes);
     this.fields.push(newField);
+    return newField;
   }
 
   removeField(field: Field) {}
+
+  toSerial() {
+    return {
+      name: this.name,
+      fields: this.fields.map((f) => f.toSerial()),
+    };
+  }
 }

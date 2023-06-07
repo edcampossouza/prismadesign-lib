@@ -65,4 +65,12 @@ export class Field {
   qualifiedName(): string {
     return `${this.model.name}.${this.model} : ${this.type.name}`;
   }
+
+  toSerial() {
+    return {
+      name: this.name,
+      type: this.type.name,
+      attributes: this.attributes.map((a) => a.toSerial()),
+    };
+  }
 }
