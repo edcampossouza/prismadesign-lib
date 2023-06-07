@@ -2,6 +2,7 @@ import { InvalidNameError } from "../index";
 import { DataType } from "./DataType";
 import { Model } from "./Model";
 import { Reference } from "./Reference";
+import { FieldAttribute } from "../index";
 
 const FieldNameRegex = /^[A-Za-z][A-Za-z0-9_]*$/;
 
@@ -10,6 +11,7 @@ export class Field {
     public name: string,
     public model: Model,
     public type: DataType,
+    public attributes: FieldAttribute[] = [],
     private referencedBy: Reference[] = []
   ) {
     if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
