@@ -17,7 +17,7 @@ export class Field {
     if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
   }
 
-  private references?: Reference;
+  public references?: Reference;
 
   /**
    * Makes this field reference another
@@ -48,13 +48,17 @@ export class Field {
   removeReferenced(referencer: Reference) {
     this.referencedBy = this.referencedBy.filter((r) => r !== referencer);
   }
+
   /**
    *
    * @returns human-readable description including model name and field name
    */
 
-  fullName(): string {
-    return `${this.model.name}.${this.model}`;
+  fullName(options: { attributes: Boolean } = { attributes: false }): string {
+    const attrStr = this.attributes.map((a) => `@${a.name}`).join(" ");
+    return `${this.model.name}.${this.name}${
+      options.attributes ? ` ${attrStr}` : ""
+    }`;
   }
 
   /**
@@ -63,7 +67,7 @@ export class Field {
    *
    */
   qualifiedName(): string {
-    return `${this.model.name}.${this.model} : ${this.type.name}`;
+    return `${this.model.name}.${this.name} : ${this.type.name}`;
   }
 
   toSerial() {
@@ -71,6 +75,12 @@ export class Field {
       name: this.name,
       type: this.type.name,
       attributes: this.attributes.map((a) => a.toSerial()),
+      references: this.references
+        ? {
+            model: this.references.referenced.model.name,
+            field: this.references.referenced.name,
+          }
+        : undefined,
     };
   }
 }

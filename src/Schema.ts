@@ -1,7 +1,20 @@
 import { Field, NameConflictError } from "../index";
 import { Model } from "./Model";
 
-export class Schema {
+type SerializedSchema = {
+  name: string;
+  models: {
+    name: string;
+    fields: {
+      name: string;
+      type: string;
+      attributes: { name: string }[];
+      references?: { model: string; field: string };
+    }[];
+  }[];
+};
+
+class Schema {
   constructor(public name: string, public models: Model[] = []) {}
 
   addModel(name: string): Model {
@@ -14,10 +27,12 @@ export class Schema {
     return newModel;
   }
 
-  toSerial() {
+  toSerial(): SerializedSchema {
     return {
       name: this.name,
       models: this.models.map((m) => m.toSerial()),
     };
   }
 }
+
+export { Schema, SerializedSchema };
