@@ -9,11 +9,13 @@ const IdFieldAttribute = new FieldAttribute("id");
 const UniqueFieldAttribute = new FieldAttribute("unique");
 const MapFieldAttribute = new FieldAttribute("map");
 const UpdatedAtFieldAttribute = new FieldAttribute("updatedAt");
+const DefaultFieldAttribute = new FieldAttribute("default");
 
 const attributes = [
   MapFieldAttribute,
   IdFieldAttribute,
   UpdatedAtFieldAttribute,
+  DefaultFieldAttribute,
 ];
 
 export {
@@ -22,5 +24,6 @@ export {
   MapFieldAttribute,
   IdFieldAttribute,
   UpdatedAtFieldAttribute,
+  DefaultFieldAttribute,
   attributes,
 };

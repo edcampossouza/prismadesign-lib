@@ -2,37 +2,56 @@ import {
   FieldAttribute,
   IdFieldAttribute,
   UniqueFieldAttribute,
-  MapFieldAttribute,
   UpdatedAtFieldAttribute,
+  DefaultFieldAttribute,
 } from "./FieldAttribute";
 
 class DataType {
   constructor(
     public name: string,
-    public possibleAttributes: FieldAttribute[] = []
+    public possibleAttributes: FieldAttribute[] = [],
+    public defaultValidator: (value: string) => boolean = () => true
   ) {}
 }
 
-const IntType = new DataType("Int", [
-  IdFieldAttribute,
-  UniqueFieldAttribute,
-  MapFieldAttribute,
-]);
+function IntTypeValidator(value: string): boolean {
+  return value === "autoincrement()" || value.match(/^\d+$/) == null;
+}
+
+const IntType = new DataType(
+  "Int",
+  [IdFieldAttribute, UniqueFieldAttribute, DefaultFieldAttribute],
+  IntTypeValidator
+);
 
 const StringType = new DataType("String", [
   IdFieldAttribute,
+  DefaultFieldAttribute,
   UniqueFieldAttribute,
-  MapFieldAttribute,
 ]);
 
-const BooleanType = new DataType("Boolean");
-const DecimalType = new DataType("Decimal");
-const DateTimeType = new DataType("DateTime", [
-  IdFieldAttribute,
-  UniqueFieldAttribute,
-  MapFieldAttribute,
-  UpdatedAtFieldAttribute,
-]);
+const BooleanType = new DataType(
+  "Boolean",
+  [DefaultFieldAttribute],
+  (value) => ["true", "false"].includes(value)
+);
+
+function DecimalTypeValidator(value: string): boolean {
+  const decimalVal = parseFloat(value);
+  return !isNaN(decimalVal);
+}
+
+const DecimalType = new DataType(
+  "Decimal",
+  [DefaultFieldAttribute],
+  DecimalTypeValidator
+);
+
+const DateTimeType = new DataType(
+  "DateTime",
+  [IdFieldAttribute, UniqueFieldAttribute, UpdatedAtFieldAttribute],
+  (value) => value === "now()"
+);
 
 export {
   IntType,
