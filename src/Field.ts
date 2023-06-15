@@ -1,4 +1,9 @@
-import { InvalidNameError } from "../index";
+import {
+  IdFieldAttribute,
+  InvalidNameError,
+  InvalidReferenceFieldError,
+  NameConflictError,
+} from "../index";
 import { DataType } from "./DataType";
 import { Model } from "./Model";
 import { Reference } from "./Reference";
@@ -12,7 +17,7 @@ export class Field {
     public model: Model,
     public type: DataType,
     public attributes: FieldAttribute[] = [],
-    private referencedBy: Reference[] = []
+    public referencedBy: Reference[] = []
   ) {
     if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
   }
@@ -25,11 +30,38 @@ export class Field {
    */
   setReference(referenced: Field) {
     const newRef = new Reference(referenced, this);
+    if (!referenced.isId()) throw new InvalidReferenceFieldError(referenced);
     if (this.references) {
       this.references.referenced.removeReferenced(this.references);
     }
     this.references = newRef;
     referenced.addReferenced(newRef);
+  }
+
+  /**
+   *
+   * @returns true if this field has an id attribute
+   */
+  isId(): boolean {
+    return this.attributes.includes(IdFieldAttribute);
+  }
+
+  /**
+   *
+   * @param data: new data
+   * @returns the updated field
+   */
+  updateField(data: { name: string }): Field {
+    const { name } = data;
+    if (name) {
+      const exists = this.model.getFieldByName(name);
+      if (exists !== null && exists !== this) {
+        throw new NameConflictError(name, "field");
+      } else {
+        this.name = name;
+      }
+    }
+    return this;
   }
 
   /**

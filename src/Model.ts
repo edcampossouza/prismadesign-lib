@@ -1,8 +1,13 @@
 import { DataType } from "./DataType";
 import { Field } from "./Field";
 import { Schema } from "./Schema";
-import { FieldAttribute } from "./FieldAttribute";
-import { InvalidNameError, NameConflictError } from "./errors/errors";
+import { FieldAttribute, IdFieldAttribute } from "./FieldAttribute";
+import {
+  DeletedReferenceError,
+  DuplicatedIdError,
+  InvalidNameError,
+  NameConflictError,
+} from "./errors/errors";
 
 const ModelNameRegex = /^[A-Za-z][A-Za-z0-9_]*$/;
 
@@ -22,12 +27,31 @@ export class Model {
   ) {
     const _exists: Field | undefined = this.fields.find((f) => f.name === name);
     if (_exists) throw new NameConflictError(name, "field");
+    if (fieldAttributes.includes(IdFieldAttribute)) {
+      const idField = this.getIdField();
+      if (idField !== null) throw new DuplicatedIdError(idField, name);
+    }
     const newField = new Field(name, this, type, fieldAttributes);
     this.fields.push(newField);
     return newField;
   }
 
-  removeField(field: Field) {}
+  getIdField(): Field | null {
+    const idField = this.fields.find((f) =>
+      f.attributes.includes(IdFieldAttribute)
+    );
+    return idField || null;
+  }
+
+  removeField(field: Field) {
+    if (field.referencedBy.length !== 0)
+      throw new DeletedReferenceError(field, field.referencedBy[0].referencer);
+    this.fields = this.fields.filter((f) => f !== field);
+  }
+
+  getFieldByName(name: string): Field | null {
+    return this.fields.find((f) => f.name === name) || null;
+  }
 
   toSerial() {
     return {

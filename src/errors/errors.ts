@@ -29,3 +29,19 @@ export class InvalidNameError extends Error {
     super(`Invalid ${type} name: ${name}`);
   }
 }
+
+export class DuplicatedIdError extends Error {
+  constructor(public idField: Field, newIdName: string) {
+    super(
+      `Can't create id field ${newIdName}: ${idField.model.name} already has an id field ${idField.name}`
+    );
+  }
+}
+
+export class InvalidReferenceFieldError extends Error {
+  constructor(referenced: Field) {
+    super(
+      `Can't create reference: field ${referenced.fullName()} is not an @id`
+    );
+  }
+}
