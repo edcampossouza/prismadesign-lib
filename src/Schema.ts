@@ -10,6 +10,7 @@ type SerializedSchema = {
       type: string;
       attributes: { name: string }[];
       references?: { model: string; field: string };
+      default?: string;
     }[];
   }[];
 };

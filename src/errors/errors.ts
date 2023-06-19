@@ -1,3 +1,4 @@
+import { DataType } from "../DataType";
 import { Field } from "../Field";
 
 export class NameConflictError extends Error {
@@ -43,5 +44,11 @@ export class InvalidReferenceFieldError extends Error {
     super(
       `Can't create reference: field ${referenced.fullName()} is not an @id`
     );
+  }
+}
+
+export class InvalidDefaultValueError extends Error {
+  constructor(type: DataType, value: string) {
+    super(`Value "${value}" is invalid for type ${type.name} `);
   }
 }

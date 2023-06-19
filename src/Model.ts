@@ -23,6 +23,7 @@ export class Model {
   addField(
     name: string,
     type: DataType,
+    defaultValue?: string,
     fieldAttributes: FieldAttribute[] = []
   ) {
     const _exists: Field | undefined = this.fields.find((f) => f.name === name);
@@ -31,7 +32,7 @@ export class Model {
       const idField = this.getIdField();
       if (idField !== null) throw new DuplicatedIdError(idField, name);
     }
-    const newField = new Field(name, this, type, fieldAttributes);
+    const newField = new Field(name, this, type, defaultValue, fieldAttributes);
     this.fields.push(newField);
     return newField;
   }

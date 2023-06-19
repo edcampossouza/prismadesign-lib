@@ -15,7 +15,7 @@ class DataType {
 }
 
 function IntTypeValidator(value: string): boolean {
-  return value === "autoincrement()" || value.match(/^\d+$/) == null;
+  return value === "autoincrement()" || value.match(/^\d+$/) !== null;
 }
 
 const IntType = new DataType(

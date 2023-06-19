@@ -1,5 +1,7 @@
 import {
+  DefaultFieldAttribute,
   IdFieldAttribute,
+  InvalidDefaultValueError,
   InvalidNameError,
   InvalidReferenceFieldError,
   NameConflictError,
@@ -16,10 +18,13 @@ export class Field {
     public name: string,
     public model: Model,
     public type: DataType,
+    public defaultValue?: string,
     public attributes: FieldAttribute[] = [],
     public referencedBy: Reference[] = []
   ) {
     if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
+    if (defaultValue !== undefined && !type.defaultValidator(defaultValue))
+      throw new InvalidDefaultValueError(type, defaultValue);
   }
 
   public references?: Reference;
@@ -112,6 +117,9 @@ export class Field {
             model: this.references.referenced.model.name,
             field: this.references.referenced.name,
           }
+        : undefined,
+      default: this.attributes.includes(DefaultFieldAttribute)
+        ? this.defaultValue
         : undefined,
     };
   }
