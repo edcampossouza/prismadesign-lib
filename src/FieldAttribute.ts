@@ -1,3 +1,5 @@
+import { InvalidFieldAttributeName } from "../index";
+
 class FieldAttribute {
   constructor(public name: string) {}
   toSerial() {
@@ -18,6 +20,12 @@ const attributes = [
   DefaultFieldAttribute,
 ];
 
+function getFieldAttributeInstance(name: string): FieldAttribute {
+  const attribute = attributes.find((a) => a.name === name);
+  if (!attribute) throw new InvalidFieldAttributeName(name);
+  return attribute;
+}
+
 export {
   FieldAttribute,
   UniqueFieldAttribute,
@@ -26,4 +34,5 @@ export {
   UpdatedAtFieldAttribute,
   DefaultFieldAttribute,
   attributes,
+  getFieldAttributeInstance,
 };

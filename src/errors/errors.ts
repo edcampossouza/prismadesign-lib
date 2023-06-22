@@ -52,3 +52,21 @@ export class InvalidDefaultValueError extends Error {
     super(`Value "${value}" is invalid for type ${type.name} `);
   }
 }
+
+export class InvalidDataTypeName extends Error {
+  constructor(name: string) {
+    super(`${name} does not correspond to a data type`);
+  }
+}
+
+export class InvalidFieldAttributeName extends Error {
+  constructor(name: string) {
+    super(`${name} does not correspond to a field attribute`);
+  }
+}
+
+export class DeserializationError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}

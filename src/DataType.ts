@@ -1,3 +1,4 @@
+import { InvalidDataTypeName } from "../index";
 import {
   FieldAttribute,
   IdFieldAttribute,
@@ -30,10 +31,8 @@ const StringType = new DataType("String", [
   UniqueFieldAttribute,
 ]);
 
-const BooleanType = new DataType(
-  "Boolean",
-  [DefaultFieldAttribute],
-  (value) => ["true", "false"].includes(value)
+const BooleanType = new DataType("Boolean", [DefaultFieldAttribute], (value) =>
+  ["true", "false"].includes(value)
 );
 
 function DecimalTypeValidator(value: string): boolean {
@@ -53,6 +52,16 @@ const DateTimeType = new DataType(
   (value) => value === "now()"
 );
 
+const _allTypes = [IntType, StringType, DecimalType, BooleanType, DateTimeType];
+
+function getDataTypeInstance(name: string): DataType {
+  const dt = _allTypes.find((t) => t.name === name);
+  if (!dt) {
+    throw new InvalidDataTypeName(name);
+  }
+  return dt;
+}
+
 export {
   IntType,
   StringType,
@@ -60,4 +69,5 @@ export {
   DecimalType,
   DateTimeType,
   DataType,
+  getDataTypeInstance,
 };
