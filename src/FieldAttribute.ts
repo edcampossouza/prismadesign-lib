@@ -18,6 +18,7 @@ const attributes = [
   IdFieldAttribute,
   UpdatedAtFieldAttribute,
   DefaultFieldAttribute,
+  UniqueFieldAttribute,
 ];
 
 function getFieldAttributeInstance(name: string): FieldAttribute {
