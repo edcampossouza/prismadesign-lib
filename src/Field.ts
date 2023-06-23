@@ -44,6 +44,19 @@ export class Field {
   }
 
   /**
+   * Deletes the reference fron this field to another
+   */
+  removeReference() {
+    if (this.references) {
+      const target = this.references.referenced;
+      target.referencedBy = target.referencedBy.filter(
+        (r) => r !== this.references
+      );
+    }
+    delete this.references;
+  }
+
+  /**
    *
    * @returns true if this field has an id attribute
    */

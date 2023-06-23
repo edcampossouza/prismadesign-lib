@@ -47,6 +47,7 @@ export class Model {
   removeField(field: Field) {
     if (field.referencedBy.length !== 0)
       throw new DeletedReferenceError(field, field.referencedBy[0].referencer);
+    field.removeReference();
     this.fields = this.fields.filter((f) => f !== field);
   }
 
