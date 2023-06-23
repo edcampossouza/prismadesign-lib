@@ -1,4 +1,5 @@
 import {
+  DeletedReferenceError,
   DeserializationError,
   Field,
   NameConflictError,
@@ -42,6 +43,24 @@ class Schema {
     const model = this.findModel(modelName);
     if (model) return model.getFieldByName(fieldName);
     return null;
+  }
+
+  deleteModel(model: Model) {
+    for (const field of model.fields) {
+      if (field.referencedBy.length !== 0) {
+        throw new DeletedReferenceError(
+          field,
+          field.referencedBy[0].referencer
+        );
+      }
+    }
+
+    this.models = this.models.filter((m) => m !== model);
+    for (const field of model.fields) {
+      if (field.references) {
+        field.removeReference();
+      }
+    }
   }
 
   toSerial(): SerializedSchema {

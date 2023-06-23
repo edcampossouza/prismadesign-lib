@@ -10,7 +10,7 @@ export class NameConflictError extends Error {
 export class DeletedReferenceError extends Error {
   constructor(public referenced: Field, referencer: Field) {
     super(
-      `Cannot delete field ${
+      `Cannot delete field ${referenced.model.name}.${
         referenced.name
       } as it is referenced by ${referencer.fullName()}`
     );
