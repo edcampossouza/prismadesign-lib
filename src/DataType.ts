@@ -48,7 +48,7 @@ const DecimalType = new DataType(
 
 const DateTimeType = new DataType(
   "DateTime",
-  [UniqueFieldAttribute, UpdatedAtFieldAttribute],
+  [DefaultFieldAttribute, UpdatedAtFieldAttribute],
   (value) => value === "now()"
 );
 
