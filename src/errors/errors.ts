@@ -1,5 +1,6 @@
 import { DataType } from "../DataType";
 import { Field } from "../Field";
+import { FieldAttribute } from "../FieldAttribute";
 
 export class NameConflictError extends Error {
   constructor(public name: string, public type: "field" | "model") {
@@ -68,5 +69,11 @@ export class InvalidFieldAttributeName extends Error {
 export class DeserializationError extends Error {
   constructor(message: string) {
     super(message);
+  }
+}
+
+export class IncompatibleAttributeError extends Error {
+  constructor(type: DataType, attribute: FieldAttribute) {
+    super(`Type ${type.name} does not support ${attribute.name} attribute`);
   }
 }

@@ -1,6 +1,7 @@
 import {
   DefaultFieldAttribute,
   IdFieldAttribute,
+  IncompatibleAttributeError,
   InvalidDefaultValueError,
   InvalidNameError,
   InvalidReferenceFieldError,
@@ -25,6 +26,10 @@ export class Field {
     if (!name.match(FieldNameRegex)) throw new InvalidNameError(name, "field");
     if (defaultValue !== undefined && !type.defaultValidator(defaultValue))
       throw new InvalidDefaultValueError(type, defaultValue);
+    for (const attr of attributes) {
+      if (!type.possibleAttributes.includes(attr))
+        throw new IncompatibleAttributeError(type, attr);
+    }
   }
 
   public references?: Reference;
